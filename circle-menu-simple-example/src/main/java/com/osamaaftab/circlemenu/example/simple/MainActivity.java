@@ -1,9 +1,9 @@
-package com.ramotion.circlemenu.example.simple;
+package com.osamaaftab.circlemenu.example.simple;
 
 import android.os.Bundle;
 import android.util.Log;
 
-import com.ramotion.circlemenu.CircleMenuView;
+import com.osamaaftab.circlemenu.CircleMenuView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

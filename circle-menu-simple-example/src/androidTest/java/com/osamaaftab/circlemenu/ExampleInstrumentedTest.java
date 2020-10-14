@@ -1,4 +1,4 @@
-package com.ramotion.circlemenu;
+package com.osamaaftab.circlemenu;
 
 import android.content.Context;
 
