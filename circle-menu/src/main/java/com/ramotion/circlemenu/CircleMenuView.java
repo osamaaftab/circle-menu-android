@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -38,7 +39,7 @@ import androidx.core.view.ViewCompat;
 public class CircleMenuView extends FrameLayout {
 
     private static final int DEFAULT_BUTTON_SIZE = 56;
-    private static final float DEFAULT_DISTANCE = DEFAULT_BUTTON_SIZE * 1.5f;
+    private static final float DEFAULT_DISTANCE = DEFAULT_BUTTON_SIZE * 2.5f;
     private static final float DEFAULT_RING_SCALE_RATIO = 1.3f;
     private static final float DEFAULT_CLOSE_ICON_ALPHA = 0.3f;
 
@@ -70,64 +71,83 @@ public class CircleMenuView extends FrameLayout {
     public static class EventListener {
         /**
          * Invoked on menu button click, before animation start.
+         *
          * @param view current CircleMenuView instance.
          */
-        public void onMenuOpenAnimationStart(@NonNull CircleMenuView view) {}
+        public void onMenuOpenAnimationStart(@NonNull CircleMenuView view) {
+        }
 
         /**
          * Invoked on menu button click, after animation end.
+         *
          * @param view - current CircleMenuView instance.
          */
-        public void onMenuOpenAnimationEnd(@NonNull CircleMenuView view) {}
+        public void onMenuOpenAnimationEnd(@NonNull CircleMenuView view) {
+        }
 
         /**
          * Invoked on close menu button click, before animation start.
+         *
          * @param view - current CircleMenuView instance.
          */
-        public void onMenuCloseAnimationStart(@NonNull CircleMenuView view) {}
+        public void onMenuCloseAnimationStart(@NonNull CircleMenuView view) {
+        }
 
         /**
          * Invoked on close menu button click, after animation end.
+         *
          * @param view - current CircleMenuView instance.
          */
-        public void onMenuCloseAnimationEnd(@NonNull CircleMenuView view) {}
+        public void onMenuCloseAnimationEnd(@NonNull CircleMenuView view) {
+        }
 
         /**
          * Invoked on button click, before animation start.
-         * @param view - current CircleMenuView instance.
+         *
+         * @param view        - current CircleMenuView instance.
          * @param buttonIndex - clicked button zero-based index.
          */
-        public void onButtonClickAnimationStart(@NonNull CircleMenuView view, int buttonIndex) {}
+        public void onButtonClickAnimationStart(@NonNull CircleMenuView view, int buttonIndex) {
+        }
 
         /**
          * Invoked on button click, after animation end.
-         * @param view - current CircleMenuView instance.
+         *
+         * @param view        - current CircleMenuView instance.
          * @param buttonIndex - clicked button zero-based index.
          */
-        public void onButtonClickAnimationEnd(@NonNull CircleMenuView view, int buttonIndex) {}
+        public void onButtonClickAnimationEnd(@NonNull CircleMenuView view, int buttonIndex) {
+        }
 
         /**
          * Invoked on button long click. Invokes {@see onButtonLongClickAnimationStart} and {@see onButtonLongClickAnimationEnd}
          * if returns true.
-         * @param view current CircleMenuView instance.
+         *
+         * @param view        current CircleMenuView instance.
          * @param buttonIndex clicked button zero-based index.
-         * @return  true if the callback consumed the long click, false otherwise.
+         * @return true if the callback consumed the long click, false otherwise.
          */
-        public boolean onButtonLongClick(@NonNull CircleMenuView view, int buttonIndex) { return false; }
+        public boolean onButtonLongClick(@NonNull CircleMenuView view, int buttonIndex) {
+            return false;
+        }
 
         /**
          * Invoked on button long click, before animation start.
-         * @param view - current CircleMenuView instance.
+         *
+         * @param view        - current CircleMenuView instance.
          * @param buttonIndex - clicked button zero-based index.
          */
-        public void onButtonLongClickAnimationStart(@NonNull CircleMenuView view, int buttonIndex) {}
+        public void onButtonLongClickAnimationStart(@NonNull CircleMenuView view, int buttonIndex) {
+        }
 
         /**
          * Invoked on button long click, after animation end.
-         * @param view - current CircleMenuView instance.
+         *
+         * @param view        - current CircleMenuView instance.
          * @param buttonIndex - clicked button zero-based index.
          */
-        public void onButtonLongClickAnimationEnd(@NonNull CircleMenuView view, int buttonIndex) {}
+        public void onButtonLongClickAnimationEnd(@NonNull CircleMenuView view, int buttonIndex) {
+        }
     }
 
     private class OnButtonClickListener implements View.OnClickListener {
@@ -166,15 +186,16 @@ public class CircleMenuView extends FrameLayout {
                 return false;
             }
 
-            final boolean result =  mListener.onButtonLongClick(CircleMenuView.this, mButtons.indexOf(view));
+            final boolean result = mListener.onButtonLongClick(CircleMenuView.this, mButtons.indexOf(view));
             if (result && !mIsAnimating) {
-                final Animator click = getButtonClickAnimation((FloatingActionButton)view);
+                final Animator click = getButtonClickAnimation((FloatingActionButton) view);
                 click.setDuration(mLongClickDurationRing);
                 click.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationStart(Animator animation) {
                         mListener.onButtonLongClickAnimationStart(CircleMenuView.this, mButtons.indexOf(view));
                     }
+
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         mClosedState = true;
@@ -248,9 +269,10 @@ public class CircleMenuView extends FrameLayout {
 
     /**
      * Constructor for creation CircleMenuView in code, not in xml-layout.
+     *
      * @param context current context, will be used to access resources.
-     * @param icons buttons icons resource ids array. Items must be @DrawableRes.
-     * @param colors buttons colors resource ids array. Items must be @DrawableRes.
+     * @param icons   buttons icons resource ids array. Items must be @DrawableRes.
+     * @param colors  buttons colors resource ids array. Items must be @DrawableRes.
      */
     public CircleMenuView(@NonNull Context context, @NonNull List<Integer> icons, @NonNull List<Integer> colors) {
         super(context);
@@ -329,6 +351,7 @@ public class CircleMenuView extends FrameLayout {
                     }
                 }
             }
+
             @Override
             public void onAnimationEnd(Animator animation) {
                 if (mListener != null) {
@@ -365,6 +388,7 @@ public class CircleMenuView extends FrameLayout {
         final int buttonsCount = Math.min(icons.size(), colors.size());
         for (int i = 0; i < buttonsCount; i++) {
             final FloatingActionButton button = new FloatingActionButton(context);
+            TextView tv = new TextView(context);
             button.setImageResource(icons.get(i));
             button.setBackgroundTintList(ColorStateList.valueOf(colors.get(i)));
             button.setClickable(true);
@@ -373,7 +397,8 @@ public class CircleMenuView extends FrameLayout {
             button.setScaleX(0);
             button.setScaleY(0);
             button.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-
+            tv.setText("sdfsfs");
+            tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
             addView(button);
             mButtons.add(button);
         }
@@ -381,7 +406,7 @@ public class CircleMenuView extends FrameLayout {
 
     private void offsetAndScaleButtons(float centerX, float centerY, float angleStep, float offset, float scale) {
         for (int i = 0, cnt = mButtons.size(); i < cnt; i++) {
-            final float angle = (90 * i) - 180   ;
+            final float angle = (45 * i) - 180;
             final float x = (float) Math.cos(Math.toRadians(angle)) * offset;
             final float y = (float) Math.sin(Math.toRadians(angle)) * offset;
 
@@ -443,7 +468,7 @@ public class CircleMenuView extends FrameLayout {
             @Override
             public void onAnimationStart(Animator animation) {
                 mIsAnimating = true;
-
+///////////////////
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                     bringChildToFront(mRingView);
                     bringChildToFront(button);
@@ -462,6 +487,7 @@ public class CircleMenuView extends FrameLayout {
                 mRingView.setScaleY(1f);
                 mRingView.setVisibility(View.VISIBLE);
             }
+
             @Override
             public void onAnimationEnd(Animator animation) {
                 mIsAnimating = false;
@@ -489,6 +515,7 @@ public class CircleMenuView extends FrameLayout {
         final ObjectAnimator rotateAnimation = ObjectAnimator.ofPropertyValuesHolder(mMenuButton, pvhRotation);
         rotateAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             private boolean iconChanged = false;
+
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 final float fraction = valueAnimator.getAnimatedFraction();
@@ -510,7 +537,7 @@ public class CircleMenuView extends FrameLayout {
         buttonsAppear.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
-                for (View view: mButtons) {
+                for (View view : mButtons) {
                     view.setVisibility(View.VISIBLE);
                 }
             }
@@ -519,7 +546,7 @@ public class CircleMenuView extends FrameLayout {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 final float fraction = valueAnimator.getAnimatedFraction();
-                final float value = (float)valueAnimator.getAnimatedValue();
+                final float value = (float) valueAnimator.getAnimatedValue();
                 offsetAndScaleButtons(centerX, centerY, angleStep, value, fraction);
             }
         });
@@ -531,6 +558,7 @@ public class CircleMenuView extends FrameLayout {
             public void onAnimationStart(Animator animation) {
                 mIsAnimating = true;
             }
+
             @Override
             public void onAnimationEnd(Animator animation) {
                 mIsAnimating = false;
@@ -549,10 +577,11 @@ public class CircleMenuView extends FrameLayout {
         set1.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
-                for (View view: mButtons) {
+                for (View view : mButtons) {
                     view.setVisibility(View.INVISIBLE);
                 }
             }
+
             @Override
             public void onAnimationEnd(Animator animation) {
                 mMenuButton.setRotation(60f);
@@ -575,6 +604,7 @@ public class CircleMenuView extends FrameLayout {
             public void onAnimationStart(Animator animation) {
                 mIsAnimating = true;
             }
+
             @Override
             public void onAnimationEnd(Animator animation) {
                 mIsAnimating = false;
@@ -603,6 +633,7 @@ public class CircleMenuView extends FrameLayout {
 
     /**
      * See {@link R.styleable#CircleMenuView_duration_close}
+     *
      * @param duration close animation duration in milliseconds.
      */
     public void setDurationClose(int duration) {
@@ -611,6 +642,7 @@ public class CircleMenuView extends FrameLayout {
 
     /**
      * See {@link R.styleable#CircleMenuView_duration_close}
+     *
      * @return current close animation duration.
      */
     public int getDurationClose() {
@@ -619,6 +651,7 @@ public class CircleMenuView extends FrameLayout {
 
     /**
      * See {@link R.styleable#CircleMenuView_duration_open}
+     *
      * @param duration open animation duration in milliseconds.
      */
     public void setDurationOpen(int duration) {
@@ -627,6 +660,7 @@ public class CircleMenuView extends FrameLayout {
 
     /**
      * See {@link R.styleable#CircleMenuView_duration_open}
+     *
      * @return current open animation duration.
      */
     public int getDurationOpen() {
@@ -635,6 +669,7 @@ public class CircleMenuView extends FrameLayout {
 
     /**
      * See {@link R.styleable#CircleMenuView_duration_ring}
+     *
      * @param duration ring animation duration in milliseconds.
      */
     public void setDurationRing(int duration) {
@@ -643,6 +678,7 @@ public class CircleMenuView extends FrameLayout {
 
     /**
      * See {@link R.styleable#CircleMenuView_duration_ring}
+     *
      * @return current ring animation duration.
      */
     public int getDurationRing() {
@@ -651,6 +687,7 @@ public class CircleMenuView extends FrameLayout {
 
     /**
      * See {@link R.styleable#CircleMenuView_long_click_duration_ring}
+     *
      * @return current long click ring animation duration.
      */
     public int getLongClickDurationRing() {
@@ -659,6 +696,7 @@ public class CircleMenuView extends FrameLayout {
 
     /**
      * See {@link R.styleable#CircleMenuView_long_click_duration_ring}
+     *
      * @param duration long click ring animation duration in milliseconds.
      */
     public void setLongClickDurationRing(int duration) {
@@ -667,6 +705,7 @@ public class CircleMenuView extends FrameLayout {
 
     /**
      * See {@link R.styleable#CircleMenuView_distance}
+     *
      * @param distance in pixels.
      */
     public void setDistance(float distance) {
@@ -676,6 +715,7 @@ public class CircleMenuView extends FrameLayout {
 
     /**
      * See {@link R.styleable#CircleMenuView_distance}
+     *
      * @return current distance in pixels.
      */
     public float getDistance() {
@@ -684,6 +724,7 @@ public class CircleMenuView extends FrameLayout {
 
     /**
      * See {@link CircleMenuView.EventListener }
+     *
      * @param listener new event listener or null.
      */
     public void setEventListener(@Nullable EventListener listener) {
@@ -692,6 +733,7 @@ public class CircleMenuView extends FrameLayout {
 
     /**
      * See {@link CircleMenuView.EventListener }
+     *
      * @return current event listener or null.
      */
     public EventListener getEventListener() {
@@ -729,7 +771,7 @@ public class CircleMenuView extends FrameLayout {
             mMenuButton.setAlpha(open ? DEFAULT_CLOSE_ICON_ALPHA : 1f);
 
             final int visibility = open ? View.VISIBLE : View.INVISIBLE;
-            for (View view: mButtons) {
+            for (View view : mButtons) {
                 view.setVisibility(visibility);
             }
 
@@ -739,6 +781,7 @@ public class CircleMenuView extends FrameLayout {
 
     /**
      * Open menu programmatically
+     *
      * @param animate open with animation or not
      */
     public void open(boolean animate) {
@@ -747,6 +790,7 @@ public class CircleMenuView extends FrameLayout {
 
     /**
      * Close menu programmatically
+     *
      * @param animate close with animation or not
      */
     public void close(boolean animate) {

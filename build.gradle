@@ -8,6 +8,8 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.1'
         classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1' // Add this line
+
     }
 }
 
